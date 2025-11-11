@@ -6,7 +6,7 @@ import { NavBar } from '@/components/snag/Navbar';
 import { SnagForm } from '@/components/snag/SnagForm';
 import { AnalysisPanel } from '@/components/snag/AnalysisPanel';
 import { SnagRegister } from '@/components/snag/SnagRegister';
-import { SnagSidebar } from '@/components/snag/SnagSidebar';
+import { SnagTopBar } from '@/components/snag/SnagTopBar';
 import type {
   AnalysisPreview,
   FormState,
@@ -216,6 +216,7 @@ export default function Home() {
         priority: record.priority,
         dueDate: record.dueDate,
         defectType: record.defectType,
+        confidence: record.confidence,
       },
       analysedAt: record.updatedAt,
     });
@@ -370,7 +371,7 @@ export default function Home() {
       <NavBar />
       <main className='min-h-screen bg-[color:var(--hb-bg)] text-[color:var(--hb-text)] transition-colors'>
         <div className='mx-auto flex w-full flex-col gap-12 px-6 pb-20 pt-12'>
-          <SnagSidebar activeView={activeView} onSelect={setActiveView} />
+          <SnagTopBar activeView={activeView} onSelect={setActiveView} />
 
           <div className='flex w-full flex-1 flex-col gap-12 lg:flex-row lg:items-start'>
             {activeView === 'form' ? (
@@ -436,6 +437,7 @@ function createSnagRecord(
     priority: analysis.priority,
     dueDate: analysis.dueDate,
     defectType: analysis.defectType,
+    confidence: analysis.confidence,
     createdAt: base?.createdAt ?? timestamp,
     updatedAt: timestamp,
   };

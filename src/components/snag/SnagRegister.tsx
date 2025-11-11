@@ -64,7 +64,7 @@ export function SnagRegister({
           <button
             type='button'
             onClick={onExport}
-            className='hb-btn hb-btn--primary'
+            className='hb-btn hb-btn--primary dark:bg-[color:var(--hb-accent)] dark:text-[#181d1c]'
           >
             Export CSV
           </button>
@@ -107,7 +107,7 @@ export function SnagRegister({
       {filteredSnags.length ? (
         <div className='overflow-hidden rounded-3xl border border-[color:var(--hb-border)] bg-[color:var(--hb-surface-soft)] shadow-lg shadow-black/20 dark:border-white/10 dark:bg-white/5 dark:shadow-black/50'>
           <div className='max-h-[520px] overflow-x-auto'>
-            <table className='min-w-full text-left text-sm text-[color:var(--hb-text)] dark:text-white/85'>
+            <table className='w-full text-left text-sm text-[color:var(--hb-text)] dark:text-white/85'>
               <thead className='bg-[color:var(--hb-surface)] text-xs uppercase tracking-wide text-[color:var(--hb-text-muted)] dark:bg-white/5 dark:text-white/60'>
                 <tr>
                   <th className='px-5 py-3 font-semibold'>Summary</th>

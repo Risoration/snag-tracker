@@ -36,6 +36,11 @@ export function AnalysisPanel({ preview }: AnalysisPanelProps) {
               tone={priorityTone(previewResult.priority)}
             />
             <InfoTile label='Trade' value={previewResult.trade} />
+            <InfoTile
+              label='Confidence'
+              value={formatConfidence(previewResult.confidence)}
+              tone={confidenceTone(previewResult.confidence)}
+            />
             <InfoTile label='Due date' value={previewResult.dueDate} />
             <InfoTile label='Defect keyword' value={previewResult.defectType} />
           </div>
@@ -195,4 +200,24 @@ function priorityTone(priority: PriorityFilter) {
     default:
       return 'default';
   }
+}
+
+function formatConfidence(value?: number) {
+  if (typeof value !== 'number' || Number.isNaN(value)) {
+    return '—';
+  }
+  return `${Math.round(value)}%`;
+}
+
+function confidenceTone(value?: number) {
+  if (typeof value !== 'number') {
+    return 'default';
+  }
+  if (value >= 70) {
+    return 'positive';
+  }
+  if (value >= 45) {
+    return 'warning';
+  }
+  return 'danger';
 }

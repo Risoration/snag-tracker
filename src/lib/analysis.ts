@@ -6,6 +6,7 @@ interface AnalysisResult {
   priority: Priority;
   dueDate: string;
   defectType: string;
+  confidence: number;
 }
 
 const TRADE_KEYWORDS = {
@@ -52,35 +53,48 @@ function detectTrade(notes: string) {
   const normalized = normaliseText(notes);
   let trade: string = 'Other';
   let matchedKeyword = '';
+  let tradeMatchCount = 0;
+  let totalTradeMatches = 0;
 
-  // First matching keyword wins. More advanced logic could tally counts instead.
+  // First matching keyword wins for trade classification.
   for (const [tradeName, keywords] of Object.entries(TRADE_KEYWORDS)) {
-    const foundKeyword = keywords.find((keyword) =>
+    const matches = keywords.filter((keyword) =>
       containsWholeWord(normalized, keyword)
     );
-    if (foundKeyword) {
+    if (matches.length) {
+      totalTradeMatches += matches.length;
+    }
+    if (trade === 'Other' && matches.length) {
       trade = tradeName;
-      matchedKeyword = foundKeyword;
-      break;
+      matchedKeyword = matches[0];
+      tradeMatchCount = matches.length;
     }
   }
 
-  return { trade, matchedKeyword };
+  return { trade, matchedKeyword, tradeMatchCount, totalTradeMatches };
 }
 
-function detectPriority(notes: string): Priority {
+function detectPriority(notes: string): {
+  priority: Priority;
+  matches: string[];
+} {
   const normalized = normaliseText(notes);
-  if (
-    PRIORITY_KEYWORDS.High.some((word) => containsWholeWord(normalized, word))
-  ) {
-    return 'High';
+
+  const highMatches = PRIORITY_KEYWORDS.High.filter((word) =>
+    containsWholeWord(normalized, word)
+  );
+  if (highMatches.length) {
+    return { priority: 'High', matches: highMatches };
   }
-  if (
-    PRIORITY_KEYWORDS.Low.some((word) => containsWholeWord(normalized, word))
-  ) {
-    return 'Low';
+
+  const lowMatches = PRIORITY_KEYWORDS.Low.filter((word) =>
+    containsWholeWord(normalized, word)
+  );
+  if (lowMatches.length) {
+    return { priority: 'Low', matches: lowMatches };
   }
-  return 'Medium';
+
+  return { priority: 'Medium', matches: [] };
 }
 
 function containsWholeWord(haystack: string, needle: string) {
@@ -140,18 +154,41 @@ function extractDefectKeyword(
   return wordMatch ? wordMatch[0] : 'general';
 }
 
+function calculateConfidence(
+  trade: string,
+  totalTradeMatches: number,
+  priorityMatches: string[]
+) {
+  let score = 25;
+
+  if (trade !== 'Other') {
+    score += 25;
+  }
+
+  score += Math.min(totalTradeMatches, 3) * 10;
+  score += Math.min(priorityMatches.length, 3) * 10;
+
+  return Math.min(100, Math.max(20, Math.round(score)));
+}
+
 export function analyseSnag(
   notes: string,
   today: Date = new Date()
 ): AnalysisResult {
   const safeNotes = notes.trim();
   const summary = summarise(safeNotes);
-  const { trade, matchedKeyword } = detectTrade(safeNotes);
-  const priority = detectPriority(safeNotes);
+  const { trade, matchedKeyword, tradeMatchCount, totalTradeMatches } =
+    detectTrade(safeNotes);
+  const { priority, matches: priorityMatches } = detectPriority(safeNotes);
   const dueDate = formatAsISODate(
     addWorkingDays(today, WORKING_DAY_LOOKUP[priority])
   );
   const defectType = extractDefectKeyword(safeNotes, matchedKeyword, priority);
+  const confidence = calculateConfidence(
+    trade,
+    totalTradeMatches || tradeMatchCount,
+    priorityMatches
+  );
 
   return {
     summary,
@@ -159,6 +196,7 @@ export function analyseSnag(
     priority,
     dueDate,
     defectType,
+    confidence,
   };
 }
 

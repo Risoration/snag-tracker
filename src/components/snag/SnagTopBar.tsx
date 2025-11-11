@@ -1,6 +1,6 @@
 'use client';
 
-interface SnagSidebarProps {
+interface SnagTopBarProps {
   activeView: 'form' | 'register';
   onSelect: (view: 'form' | 'register') => void;
 }
@@ -22,7 +22,7 @@ const VIEW_OPTIONS: Array<{
   },
 ];
 
-export function SnagSidebar({ activeView, onSelect }: SnagSidebarProps) {
+export function SnagTopBar({ activeView, onSelect }: SnagTopBarProps) {
   const renderToggle = (
     option: (typeof VIEW_OPTIONS)[number],
     isCompact = false
