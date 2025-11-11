@@ -12,7 +12,7 @@ export function ThemeToggle() {
     <button
       type='button'
       onClick={toggleTheme}
-      className='inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-emerald-400 hover:text-emerald-600 disabled:opacity-60 dark:border-slate-700 dark:bg-slate-900/80 dark:text-slate-200 dark:hover:border-emerald-400 dark:hover:text-emerald-300'
+      className='inline-flex items-center gap-2 rounded-xl border bg-[color:var(--hb-surface)] px-3 py-2 text-sm font-semibold text-[color:var(--hb-text)] transition'
       aria-label={label}
       title={label}
       disabled={!isReady}

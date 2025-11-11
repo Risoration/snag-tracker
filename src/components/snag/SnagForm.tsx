@@ -30,22 +30,26 @@ export function SnagForm({
   return (
     <form
       onSubmit={onSubmit}
-      className='flex flex-col gap-6 rounded-3xl border border-slate-200 bg-white/90 p-8 shadow-lg shadow-slate-900/5 transition-colors dark:border-slate-800 dark:bg-slate-900/60 dark:shadow-black/30'
+      className='hb-card hb-card--soft flex flex-col gap-8'
     >
-      <div className='flex items-center justify-between gap-4'>
-        <div className='flex flex-col'>
-          <h2 className='text-lg font-semibold text-slate-900 transition-colors dark:text-slate-100'>
+      <div className='flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between'>
+        <div className='flex flex-col gap-1'>
+          <span className='text-sm font-semibold uppercase tracking-[0.32em] text-[color:var(--hb-accent)]'>
+            {isEditing ? 'Update snag' : 'Create snag'}
+          </span>
+          <h2 className='text-2xl font-semibold text-[color:var(--hb-text)]'>
             {isEditing ? 'Edit snag' : 'New snag'}
           </h2>
-          <p className='text-sm text-slate-500 transition-colors dark:text-slate-400'>
-            Title and notes are required. We will classify the rest.
+          <p className='text-sm leading-relaxed text-[color:var(--hb-text-muted)]'>
+            Title and notes are required. We’ll analyse the rest and prefill the
+            snag register for you.
           </p>
         </div>
-        <div className='flex items-center gap-3'>
+        <div className='flex flex-wrap items-center gap-3'>
           {isEditing ? (
             <button
               type='button'
-              className='rounded-xl border border-slate-300 px-3 py-2 text-sm font-medium text-slate-600 transition hover:border-emerald-400 hover:text-emerald-600 dark:border-slate-700 dark:text-slate-200 dark:hover:border-emerald-400 dark:hover:text-emerald-300'
+              className='hb-btn hb-btn--ghost'
               onClick={onReset}
             >
               Cancel edit
@@ -53,7 +57,7 @@ export function SnagForm({
           ) : null}
           <button
             type='button'
-            className='rounded-xl border border-slate-300 px-3 py-2 text-sm font-medium text-slate-600 transition hover:border-emerald-400 hover:text-emerald-600 dark:border-slate-700 dark:text-slate-200 dark:hover:border-emerald-400 dark:hover:text-emerald-300'
+            className='hb-btn hb-btn--ghost'
             onClick={onReset}
           >
             Reset
@@ -73,7 +77,7 @@ export function SnagForm({
         label='Notes'
         value={form.notes}
         placeholder='Describe the snag in detail...'
-        rows={6}
+        rows={1}
         onChange={handleChange('notes')}
         required
       />
@@ -102,15 +106,12 @@ export function SnagForm({
       />
 
       {error ? (
-        <p className='rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-500/60 dark:bg-rose-500/10 dark:text-rose-200'>
+        <p className='rounded-2xl border border-[#f7b3a7] bg-[#ffe9e4] px-4 py-3 text-sm font-medium text-[#b34a3d]'>
           {error}
         </p>
       ) : null}
 
-      <button
-        type='submit'
-        className='mt-2 inline-flex items-center justify-center rounded-xl bg-emerald-500 px-5 py-3 text-base font-semibold text-emerald-950 shadow-sm transition hover:bg-emerald-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300'
-      >
+      <button type='submit' className='hb-btn hb-btn--primary self-start'>
         {isEditing ? 'Save changes' : 'Analyse & save'}
       </button>
     </form>
@@ -134,7 +135,7 @@ function TextField({
 }) {
   return (
     <label className='flex flex-col gap-2'>
-      <span className='text-sm font-medium text-slate-600 dark:text-slate-300'>
+      <span className='text-sm font-medium text-[color:var(--hb-text-muted)]'>
         {label}
       </span>
       <input
@@ -142,7 +143,7 @@ function TextField({
         value={value}
         placeholder={placeholder}
         onChange={onChange}
-        className='rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500'
+        className='hb-input'
         required={required}
       />
     </label>
@@ -166,7 +167,7 @@ function TextArea({
 }) {
   return (
     <label className='flex flex-col gap-2'>
-      <span className='text-sm font-medium text-slate-600 dark:text-slate-300'>
+      <span className='text-sm font-medium text-[color:var(--hb-text-muted)]'>
         {label}
       </span>
       <textarea
@@ -174,7 +175,7 @@ function TextArea({
         placeholder={placeholder}
         onChange={onChange}
         rows={rows}
-        className='rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500'
+        className='hb-input'
         required={required}
       />
     </label>

@@ -2,8 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Archivo:wght@400;600&display=swap');
+
 :root {
   color-scheme: light dark;
+  --hb-bg: #f8f6f2;
+  --hb-surface: #ffffff;
+  --hb-surface-soft: #f1ede6;
+  --hb-card-shadow: 0 32px 60px -35px rgba(24, 29, 28, 0.35);
+  --hb-border: #d8cec3;
+  --hb-text: #1f1f1f;
+  --hb-text-muted: #5c6061;
+  --hb-dark: #181d1c;
+  --hb-dark-soft: #202426;
+  --hb-accent: #f78a26;
+  --hb-accent-soft: #fde3c5;
+  --hb-mint: #bdeedf;
+  --hb-mint-border: #8fd7c2;
+}
+
+.dark {
+  --hb-bg: #0f1314;
+  --hb-surface: #121819;
+  --hb-surface-soft: #182022;
+  --hb-card-shadow: 0 32px 40px -40px rgba(0, 0, 0, 0.65);
+  --hb-border: #253032;
+  --hb-text: #f4f6f6;
+  --hb-text-muted: #a3adb0;
+  --hb-dark: #0f1314;
+  --hb-dark-soft: #161d1f;
+  --hb-accent: #f78a26;
+  --hb-accent-soft: rgba(247, 138, 38, 0.16);
+  --hb-mint: #1b4a3f;
+  --hb-mint-border: rgba(189, 238, 223, 0.32);
 }
 
 *,
@@ -15,5 +46,241 @@
 body {
   margin: 0;
   min-height: 100vh;
+  font-family: 'Poppins', 'Inter', system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', sans-serif;
+  background: var(--hb-bg);
+  color: var(--hb-text);
   transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Archivo', 'Poppins', sans-serif;
+  color: var(--hb-text);
+  margin: 0;
+}
+
+p {
+  color: var(--hb-text-muted);
+}
+
+a {
+  color: inherit;
+}
+
+@layer components {
+  .hb-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.65rem 1.5rem;
+    border-radius: 999px;
+    border: 1.8px solid var(--hb-border);
+    background-color: var(--hb-surface);
+    color: var(--hb-text-muted);
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: transform 0.2s ease, background-color 0.2s ease,
+      color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .hb-pill:hover {
+    border-color: var(--hb-accent);
+    color: var(--hb-text);
+    box-shadow: 0 8px 18px -12px rgba(24, 29, 28, 0.4);
+  }
+
+  .hb-pill--active {
+    background: var(--hb-accent);
+    border-color: var(--hb-mint-border);
+    color: #1f3c35;
+    box-shadow: 0 14px 28px -16px rgba(31, 60, 53, 0.45);
+  }
+
+  .dark .hb-pill--active {
+    color: #d4fff1;
+  }
+
+  .hb-card {
+    background: var(--hb-surface);
+    border-radius: 28px;
+    border: 1px solid var(--hb-border);
+    box-shadow: var(--hb-card-shadow);
+    padding: 2rem;
+  }
+
+  .hb-card--soft {
+    background: var(--hb-surface-soft);
+  }
+
+  .hb-card--dark {
+    background: var(--hb-dark);
+    color: #f6f8f9;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: 0 35px 65px -40px rgba(0, 0, 0, 0.75);
+  }
+
+  .hb-card--dark p,
+  .hb-card--dark span {
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .hb-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    padding: 0 1rem;
+    border-radius: 999px;
+    background: var(--hb-accent-soft);
+    color: var(--hb-accent);
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .hb-tag--title {
+    background: var(--hb-accent-soft);
+    color: var(--hb-accent);
+    border: 1.5px solid rgba(247, 138, 38, 0.35);
+    height: auto;
+    padding: 0.35rem 1rem;
+  }
+
+  .dark .hb-tag--title {
+    color: #ffd2a6;
+    border-color: rgba(247, 138, 38, 0.5);
+    background: rgba(247, 138, 38, 0.16);
+  }
+
+  .hb-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    padding: 0.85rem 1.6rem;
+    border-radius: 999px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease,
+      background-color 0.2s ease, border-color 0.2s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .hb-btn--primary {
+    background: var(--hb-accent);
+    color: #181d1c;
+    box-shadow: 0 20px 30px -18px rgba(247, 138, 38, 0.6);
+  }
+
+  .hb-btn--primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 24px 40px -20px rgba(247, 138, 38, 0.65);
+  }
+
+  .hb-btn--ghost {
+    background: transparent;
+    color: var(--hb-text-muted);
+    border: 1.5px solid var(--hb-border);
+  }
+
+  .hb-btn--ghost:hover {
+    color: var(--hb-text);
+    border-color: var(--hb-accent);
+  }
+
+  .hb-input {
+    width: 100%;
+    border-radius: 18px;
+    border: 1.5px solid var(--hb-border);
+    background: var(--hb-surface);
+    padding: 0.85rem 1.1rem;
+    color: var(--hb-text);
+    font-size: 0.98rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .hb-input::placeholder {
+    color: rgba(96, 100, 101, 0.6);
+  }
+  .hb-input option {
+    background-color: var(--hb-surface);
+    color: var(--hb-text);
+  }
+
+  .dark .hb-input option {
+    background-color: var(--hb-dark-soft);
+    color: var(--hb-text);
+  }
+
+  .hb-input:focus {
+    outline: none;
+    border-color: var(--hb-accent);
+    box-shadow: 0 0 0 3px var(--hb-accent-soft);
+  }
+
+  .hb-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 0.35rem 1rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .hb-chip--neutral {
+    background: rgba(24, 29, 28, 0.06);
+    color: #273133;
+    border: 1px solid rgba(24, 29, 28, 0.18);
+  }
+
+  .hb-chip--positive {
+    background: rgba(65, 180, 147, 0.16);
+    color: #1f7458;
+    border: 1px solid rgba(65, 180, 147, 0.45);
+  }
+
+  .hb-chip--warning {
+    background: rgba(253, 200, 107, 0.2);
+    color: #7a4d02;
+    border: 1px solid rgba(253, 200, 107, 0.5);
+  }
+
+  .hb-chip--danger {
+    background: rgba(255, 124, 110, 0.2);
+    color: #8d251f;
+    border: 1px solid rgba(255, 124, 110, 0.5);
+  }
+
+  .dark .hb-chip--neutral {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.86);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .dark .hb-chip--positive {
+    background: rgba(65, 180, 147, 0.18);
+    color: #9ff0d9;
+    border: 1px solid rgba(65, 180, 147, 0.4);
+  }
+
+  .dark .hb-chip--warning {
+    background: rgba(253, 200, 107, 0.18);
+    color: #ffd899;
+    border: 1px solid rgba(253, 200, 107, 0.4);
+  }
+
+  .dark .hb-chip--danger {
+    background: rgba(255, 124, 110, 0.18);
+    color: #ffbeb3;
+    border: 1px solid rgba(255, 124, 110, 0.4);
+  }
 }

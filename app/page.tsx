@@ -1,17 +1,12 @@
 'use client';
 
-import {
-  type FormEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { type FormEvent, useEffect, useMemo, useState } from 'react';
 import { analyseSnag, type AnalysisResult } from '@/lib/analysis';
-import { NavBar } from '@/components/snag/nav-bar';
-import { SnagForm } from '@/components/snag/snag-form';
-import { AnalysisPanel } from '@/components/snag/analysis-panel';
-import { SnagRegister } from '@/components/snag/snag-register';
+import { NavBar } from '@/components/snag/Navbar';
+import { SnagForm } from '@/components/snag/SnagForm';
+import { AnalysisPanel } from '@/components/snag/AnalysisPanel';
+import { SnagRegister } from '@/components/snag/SnagRegister';
+import { SnagSidebar } from '@/components/snag/SnagSidebar';
 import type {
   AnalysisPreview,
   FormState,
@@ -85,41 +80,35 @@ export default function Home() {
   const [sortAscending, setSortAscending] = useState<boolean>(true);
   // Prevents hydration mismatch while waiting for localStorage.
   const [hydrated, setHydrated] = useState<boolean>(false);
+  // Controls whether the form or the register is visible.
+  const [activeView, setActiveView] = useState<'form' | 'register'>('form');
 
+  //load snags from local storage
   useEffect(() => {
     //if the component is hydrated or the window is not defined, do nothing
     if (hydrated || typeof window === 'undefined') {
       return;
     }
 
-    //get locally stored snags
-    const stored = window.localStorage.getItem(STORAGE_KEY);
     //if there are stored snags, parse them and set the state
+    const stored = window.localStorage.getItem(STORAGE_KEY);
     if (stored) {
       try {
         const parsed = JSON.parse(stored) as SnagRecord[];
         setSnags(parsed);
-      } catch {
-        //if the stored snags are corrupt, fall back to default sample data
-        setSnags(seedSnags());
+      } catch (error) {
+        console.error('Error loading snags from local storage:', error);
       }
-    } else {
+    }
+    //if there are no stored snags, set the state to the default sample data
+    else {
       setSnags(seedSnags());
     }
     setHydrated(true);
   }, [hydrated]);
 
-  useEffect(() => {
-    //if the component is not hydrated or the window is not defined, do nothing
-    if (!hydrated || typeof window === 'undefined') {
-      return;
-    }
-    //save snags to local storage
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(snags));
-  }, [snags, hydrated]);
-
   // Smoothly scroll to subsections from the navbar.
-  const scrollToSection = useCallback((sectionId: string) => {
+  const scrollToSection = (sectionId: string) => {
     const target =
       typeof document !== 'undefined'
         ? document.getElementById(sectionId)
@@ -133,23 +122,20 @@ export default function Home() {
         behavior: 'smooth',
       });
     }
-  }, []);
+  };
 
   // Update the form field while clearing any validation errors.
-  const handleFieldChange = useCallback(
-    (field: keyof FormState, value: string) => {
-      setForm((prev) => ({ ...prev, [field]: value }));
-      if (error) {
-        setError(null);
-      }
-    },
-    [error]
-  );
+  const handleFieldChange = (field: keyof FormState, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+    if (error) {
+      setError(null);
+    }
+  };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    const formSnapshot: FormState = {
+    const formData: FormState = {
       title: form.title.trim(),
       notes: form.notes.trim(),
       plot: form.plot.trim(),
@@ -157,17 +143,17 @@ export default function Home() {
       photoUrl: form.photoUrl.trim(),
     };
 
-    if (!formSnapshot.title) {
+    if (!formData.title) {
       setError('Please add a title before analysing.');
       return;
     }
 
-    if (!formSnapshot.notes) {
+    if (!formData.notes) {
       setError('Please add snag notes before analysing.');
       return;
     }
 
-    const analysis = analyseSnag(formSnapshot.notes);
+    const analysis = analyseSnag(formData.notes);
     const timestamp = new Date().toISOString();
     let nextRecord: SnagRecord | null = null;
 
@@ -177,23 +163,23 @@ export default function Home() {
           if (snag.id !== editingId) {
             return snag;
           }
-          nextRecord = createSnagRecord(formSnapshot, analysis, snag);
+          nextRecord = createSnagRecord(formData, analysis, snag);
           return nextRecord;
         })
       );
     } else {
-      nextRecord = createSnagRecord(formSnapshot, analysis);
+      nextRecord = createSnagRecord(formData, analysis);
       setSnags((prev) => [nextRecord as SnagRecord, ...prev]);
     }
 
     // Defensive fallback if TypeScript fails to narrow `nextRecord`.
     if (!nextRecord) {
-      nextRecord = createSnagRecord(formSnapshot, analysis);
+      nextRecord = createSnagRecord(formData, analysis);
     }
 
     setPreview({
       id: nextRecord.id,
-      form: formSnapshot,
+      form: formData,
       result: analysis,
       analysedAt: timestamp,
     });
@@ -234,8 +220,11 @@ export default function Home() {
       analysedAt: record.updatedAt,
     });
     setError(null);
-    // Scroll to the top form for better UX on mobile.
-    scrollToSection('snag-form');
+    setActiveView('form');
+    // Ensure the form is in view once it renders.
+    if (typeof window !== 'undefined') {
+      window.setTimeout(() => scrollToSection('snag-form'), 0);
+    }
   };
 
   const handleDelete = (id: string) => {
@@ -378,55 +367,48 @@ export default function Home() {
 
   return (
     <>
-      <NavBar onNavigate={scrollToSection} />
-      <main className='min-h-screen bg-slate-50 text-slate-900 transition-colors dark:bg-slate-950 dark:text-slate-100'>
-        <div className='mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 pb-16 pt-28'>
-          <header className='flex flex-col gap-3'>
-            <p className='text-sm uppercase tracking-[0.35em] text-emerald-500'>
-              Homes by Honey
-            </p>
-            <h1 className='text-4xl font-semibold text-slate-900 dark:text-slate-100 md:text-5xl'>
-              Snag Tracker
-            </h1>
-            <p className='text-slate-600 transition-colors dark:text-slate-300 md:max-w-3xl'>
-              Capture build defects, classify the responsible trade, and turn
-              site notes into structured actions your handover team can trust.
-            </p>
-          </header>
+      <NavBar />
+      <main className='min-h-screen bg-[color:var(--hb-bg)] text-[color:var(--hb-text)] transition-colors'>
+        <div className='mx-auto flex w-full flex-col gap-12 px-6 pb-20 pt-12'>
+          <SnagSidebar activeView={activeView} onSelect={setActiveView} />
 
-          <section
-            id='snag-form'
-            className='grid gap-10 scroll-mt-28 lg:grid-cols-[2fr,1fr]'
-          >
-            <SnagForm
-              form={form}
-              error={error}
-              isEditing={isEditing}
-              onFieldChange={handleFieldChange}
-              onSubmit={handleSubmit}
-              onReset={handleReset}
-            />
-            <AnalysisPanel preview={preview} />
-          </section>
-
-          <SnagRegister
-            filteredSnags={filteredSnags}
-            developmentOptions={developmentOptions}
-            tradeOptions={tradeOptions}
-            selectedDevelopment={selectedDevelopment}
-            selectedTrade={selectedTrade}
-            selectedPriority={selectedPriority}
-            searchTerm={searchTerm}
-            sortAscending={sortAscending}
-            onDevelopmentChange={setSelectedDevelopment}
-            onTradeChange={setSelectedTrade}
-            onPriorityChange={setSelectedPriority}
-            onSearchChange={setSearchTerm}
-            onToggleSort={toggleSort}
-            onExport={handleExportCsv}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
+          <div className='flex w-full flex-1 flex-col gap-12 lg:flex-row lg:items-start'>
+            {activeView === 'form' ? (
+              <section
+                id='snag-form'
+                className='grid gap-10 scroll-mt-28 lg:grid-cols-[2fr,1.1fr]'
+              >
+                <SnagForm
+                  form={form}
+                  error={error}
+                  isEditing={isEditing}
+                  onFieldChange={handleFieldChange}
+                  onSubmit={handleSubmit}
+                  onReset={handleReset}
+                />
+                <AnalysisPanel preview={preview} />
+              </section>
+            ) : (
+              <SnagRegister
+                filteredSnags={filteredSnags}
+                developmentOptions={developmentOptions}
+                tradeOptions={tradeOptions}
+                selectedDevelopment={selectedDevelopment}
+                selectedTrade={selectedTrade}
+                selectedPriority={selectedPriority}
+                searchTerm={searchTerm}
+                sortAscending={sortAscending}
+                onDevelopmentChange={setSelectedDevelopment}
+                onTradeChange={setSelectedTrade}
+                onPriorityChange={setSelectedPriority}
+                onSearchChange={setSearchTerm}
+                onToggleSort={toggleSort}
+                onExport={handleExportCsv}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            )}
+          </div>
         </div>
       </main>
     </>

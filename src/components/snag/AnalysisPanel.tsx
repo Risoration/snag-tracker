@@ -11,13 +11,15 @@ export function AnalysisPanel({ preview }: AnalysisPanelProps) {
   const previewResult = preview?.result;
 
   return (
-    // Results card mirrors the form analysis output.
-    <aside className='flex flex-col gap-6 rounded-3xl border border-slate-200 bg-white/70 p-8 shadow-inner shadow-slate-900/5 transition-colors dark:border-slate-800 dark:bg-slate-900/40 dark:shadow-black/30'>
-      <div>
-        <h2 className='text-lg font-semibold text-slate-900 transition-colors dark:text-slate-100'>
+    <aside className='hb-card hb-card--soft flex flex-col gap-6'>
+      <div className='flex flex-col gap-2'>
+        <span className='text-xs font-semibold uppercase tracking-[0.32em] text-[color:var(--hb-accent)]'>
+          Insight
+        </span>
+        <h2 className='text-xl font-semibold text-[color:var(--hb-text)]'>
           Analysis
         </h2>
-        <p className='text-sm text-slate-500 transition-colors dark:text-slate-400'>
+        <p className='text-sm leading-relaxed text-[color:var(--hb-text-muted)]'>
           {previewResult
             ? 'Latest interpretation from the rules engine.'
             : 'Results appear after you analyse a snag.'}
@@ -38,23 +40,23 @@ export function AnalysisPanel({ preview }: AnalysisPanelProps) {
             <InfoTile label='Defect keyword' value={previewResult.defectType} />
           </div>
 
-          <div className='rounded-2xl border border-slate-200 bg-white/80 p-4 transition-colors dark:border-slate-800 dark:bg-slate-950/60'>
-            <h3 className='text-sm font-semibold uppercase tracking-wide text-slate-500 transition-colors dark:text-slate-400'>
+          <div className='rounded-2xl border border-[color:var(--hb-border)] bg-[color:var(--hb-surface)] p-4'>
+            <h3 className='text-sm font-semibold uppercase tracking-wide text-[color:var(--hb-text-muted)]'>
               30-word summary
             </h3>
-            <p className='mt-2 text-sm text-slate-600 transition-colors dark:text-slate-200'>
+            <p className='mt-2 text-sm leading-relaxed text-[color:var(--hb-text)]'>
               {previewResult.summary || 'No summary available.'}
             </p>
           </div>
 
-          <div className='rounded-2xl border border-slate-200 bg-white/80 p-4 text-sm text-slate-600 transition-colors dark:border-slate-800 dark:bg-slate-950/60 dark:text-slate-300'>
-            <h3 className='text-sm font-semibold uppercase tracking-wide text-slate-500 transition-colors dark:text-slate-400'>
+          <div className='rounded-2xl border border-[color:var(--hb-border)] bg-[color:var(--hb-surface)] p-4 text-sm text-[color:var(--hb-text)]'>
+            <h3 className='text-sm font-semibold uppercase tracking-wide text-[color:var(--hb-text-muted)]'>
               Snag context
             </h3>
-            <ul className='mt-3 space-y-1 text-slate-600 transition-colors dark:text-slate-200'>
+            <ul className='mt-3 space-y-1 text-[color:var(--hb-text-muted)]'>
               {previewForm?.title ? (
                 <li>
-                  <span className='text-slate-500 transition-colors dark:text-slate-400'>
+                  <span className='font-medium text-[color:var(--hb-text)]'>
                     Title:
                   </span>{' '}
                   {previewForm.title}
@@ -62,7 +64,7 @@ export function AnalysisPanel({ preview }: AnalysisPanelProps) {
               ) : null}
               {previewForm?.plot ? (
                 <li>
-                  <span className='text-slate-500 transition-colors dark:text-slate-400'>
+                  <span className='font-medium text-[color:var(--hb-text)]'>
                     Plot:
                   </span>{' '}
                   {previewForm.plot}
@@ -70,7 +72,7 @@ export function AnalysisPanel({ preview }: AnalysisPanelProps) {
               ) : null}
               {previewForm?.development ? (
                 <li>
-                  <span className='text-slate-500 transition-colors dark:text-slate-400'>
+                  <span className='font-medium text-[color:var(--hb-text)]'>
                     Development:
                   </span>{' '}
                   {previewForm.development}
@@ -78,7 +80,7 @@ export function AnalysisPanel({ preview }: AnalysisPanelProps) {
               ) : null}
               {preview?.analysedAt ? (
                 <li>
-                  <span className='text-slate-500 transition-colors dark:text-slate-400'>
+                  <span className='font-medium text-[color:var(--hb-text)]'>
                     Analysed:
                   </span>{' '}
                   {new Date(preview.analysedAt).toLocaleString()}
@@ -88,11 +90,11 @@ export function AnalysisPanel({ preview }: AnalysisPanelProps) {
           </div>
 
           {previewForm?.photoUrl ? (
-            <div className='rounded-2xl border border-slate-200 bg-white/80 p-4 transition-colors dark:border-slate-800 dark:bg-slate-950/60'>
-              <h3 className='text-sm font-semibold uppercase tracking-wide text-slate-500 transition-colors dark:text-slate-400'>
+            <div className='rounded-2xl border border-[color:var(--hb-border)] bg-[color:var(--hb-surface)] p-4'>
+              <h3 className='text-sm font-semibold uppercase tracking-wide text-[color:var(--hb-text-muted)]'>
                 Photo preview
               </h3>
-              <div className='mt-3 overflow-hidden rounded-xl border border-slate-200 transition-colors dark:border-slate-800'>
+              <div className='mt-3 overflow-hidden rounded-xl border border-[color:var(--hb-border)]'>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={previewForm.photoUrl}
@@ -108,7 +110,7 @@ export function AnalysisPanel({ preview }: AnalysisPanelProps) {
           ) : null}
         </div>
       ) : (
-        <div className='rounded-2xl border border-dashed border-slate-300 bg-white/60 p-6 text-sm text-slate-500 transition-colors dark:border-slate-800 dark:bg-slate-950/50 dark:text-slate-400'>
+        <div className='rounded-2xl border border-dashed border-[color:var(--hb-border)] bg-[color:var(--hb-surface)]/70 p-6 text-sm text-[color:var(--hb-text-muted)]'>
           Fill in the snag details and hit Analyse to generate structured
           insights.
         </div>
@@ -131,39 +133,39 @@ function InfoTile({
     string
   > = {
     default:
-      'border-slate-200 bg-white text-slate-900 transition-colors dark:border-slate-800 dark:bg-slate-950/60 dark:text-slate-100',
+      'border-[color:var(--hb-border)] bg-[color:var(--hb-surface)] text-[color:var(--hb-text)]',
     positive:
-      'border-emerald-200 bg-emerald-50 text-emerald-700 transition-colors dark:border-emerald-500/40 dark:bg-emerald-500/10 dark:text-emerald-200',
+      'bg-[rgba(65,180,147,0.12)] border-[rgba(65,180,147,0.35)] text-[#2e6f5a]',
     warning:
-      'border-amber-200 bg-amber-50 text-amber-700 transition-colors dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200',
+      'bg-[rgba(253,200,107,0.15)] border-[rgba(253,200,107,0.42)] text-[#8c5a00]',
     danger:
-      'border-rose-200 bg-rose-50 text-rose-700 transition-colors dark:border-rose-500/40 dark:bg-rose-500/10 dark:text-rose-200',
+      'bg-[rgba(255,124,110,0.15)] border-[rgba(255,124,110,0.42)] text-[#8c2c25]',
   };
 
   const labelClasses: Record<
     'default' | 'positive' | 'warning' | 'danger',
     string
   > = {
-    default: 'text-slate-500 transition-colors dark:text-slate-400',
-    positive: 'text-emerald-600 transition-colors dark:text-emerald-300',
-    warning: 'text-amber-600 transition-colors dark:text-amber-300',
-    danger: 'text-rose-600 transition-colors dark:text-rose-300',
+    default: 'text-[color:var(--hb-text-muted)]',
+    positive: 'text-[#35745d]',
+    warning: 'text-[#9a6203]',
+    danger: 'text-[#a93a31]',
   };
 
   const valueClasses: Record<
     'default' | 'positive' | 'warning' | 'danger',
     string
   > = {
-    default: 'text-slate-900 transition-colors dark:text-slate-100',
-    positive: 'text-emerald-700 transition-colors dark:text-emerald-100',
-    warning: 'text-amber-700 transition-colors dark:text-amber-100',
-    danger: 'text-rose-700 transition-colors dark:text-rose-100',
+    default: 'text-[color:var(--hb-text)]',
+    positive: 'text-[#1f5443]',
+    warning: 'text-[#7a4300]',
+    danger: 'text-[#87231f]',
   };
 
   return (
     <div
       className={[
-        'flex flex-col gap-1 rounded-2xl border p-4',
+        'flex flex-col gap-1 rounded-2xl border p-4 shadow-sm',
         toneClasses[tone],
       ].join(' ')}
     >
