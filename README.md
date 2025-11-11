@@ -6,7 +6,7 @@ Fresh Next.js 14 project bootstrapped for Homes by Honey. It ships with the App 
 
 ```bash
 pnpm install
-pnpm dev
+pnpm run dev
 ```
 
 Then open [http://localhost:3000](http://localhost:3000) to view the local build.
