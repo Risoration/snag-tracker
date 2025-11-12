@@ -46,12 +46,9 @@ export function SnagRegister({
       id='snag-table'
       className='hb-card flex flex-col gap-8 scroll-mt-28'
     >
-      <div className='flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between'>
+      <div className='flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-center'>
         <div className='flex flex-col gap-2'>
-          <span className='hb-tag hb-tag--title'>Live register</span>
-          <h2 className='text-2xl font-semibold text-[color:var(--hb-text)] dark:text-white'>
-            Snag register
-          </h2>
+          <span className='hb-tag hb-tag--title'>Snag Register</span>
           <p className='text-sm leading-relaxed text-[color:var(--hb-text-muted)] dark:text-white/70'>
             Filter by development, trade, and priority. Sort by due date, export
             to CSV, or edit entries inline.
@@ -105,9 +102,9 @@ export function SnagRegister({
       </div>
 
       {filteredSnags.length ? (
-        <div className='overflow-hidden rounded-3xl border border-[color:var(--hb-border)] bg-[color:var(--hb-surface-soft)] shadow-lg shadow-black/20 dark:border-white/10 dark:bg-white/5 dark:shadow-black/50'>
+        <div className='w-full overflow-hidden rounded-3xl border border-[color:var(--hb-border)] bg-[color:var(--hb-surface-soft)] shadow-lg shadow-black/20 dark:border-white/10 dark:bg-white/5 dark:shadow-black/50'>
           <div className='max-h-[520px] overflow-x-auto'>
-            <table className='w-full text-left text-sm text-[color:var(--hb-text)] dark:text-white/85'>
+            <table className='min-w-full text-left text-sm text-[color:var(--hb-text)] dark:text-white/85'>
               <thead className='bg-[color:var(--hb-surface)] text-xs uppercase tracking-wide text-[color:var(--hb-text-muted)] dark:bg-white/5 dark:text-white/60'>
                 <tr>
                   <th className='px-5 py-3 font-semibold'>Summary</th>
@@ -132,9 +129,6 @@ export function SnagRegister({
                       <div className='flex flex-col gap-1'>
                         <span className='font-semibold text-[color:var(--hb-text)] dark:text-white'>
                           {snag.title}
-                        </span>
-                        <span className='text-sm text-[color:var(--hb-text-muted)] dark:text-white/70'>
-                          {snag.summary}
                         </span>
                       </div>
                     </td>
@@ -188,7 +182,7 @@ export function SnagRegister({
           </div>
         </div>
       ) : (
-        <div className='rounded-2xl border border-dashed border-[color:var(--hb-border)] bg-[color:var(--hb-surface-soft)] p-10 text-center text-sm text-[color:var(--hb-text-muted)] dark:border-white/15 dark:bg-white/5 dark:text-white/70'>
+        <div className='w-full min-h-[260px] rounded-3xl border border-dashed border-[color:var(--hb-border)] bg-[color:var(--hb-surface-soft)] p-10 text-center text-sm text-[color:var(--hb-text-muted)] dark:border-white/15 dark:bg-white/5 dark:text-white/70'>
           No snags match the current filters. Try widening your search or add a
           new snag using the form above.
         </div>

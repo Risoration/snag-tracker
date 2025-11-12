@@ -111,7 +111,7 @@ export function SnagForm({
         </p>
       ) : null}
 
-      <button type='submit' className='hb-btn hb-btn--primary self-start'>
+      <button type='submit' className='hb-btn hb-btn--primary self-end'>
         {isEditing ? 'Save changes' : 'Analyse & save'}
       </button>
     </form>
